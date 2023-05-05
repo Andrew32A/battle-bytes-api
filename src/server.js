@@ -1,23 +1,24 @@
 require('dotenv').config();
 const express = require('express');
+const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
 const app = express();
-const port = 3000;
 
-// Routes
-const userRouter = require('./routes/User');
+require('./data/db')
 
-// Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-// Connect to MongoDB
-require('./data/db');
+const User = require('./models/User');
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+require('./controllers/User.js')(app);
+
+app.listen(process.env.PORT, () => {
+    console.log(`Server running on port ${process.env.PORT}`);
 });
-app.use('/dad-jokes', userRouter);
 
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
+module.exports = app;

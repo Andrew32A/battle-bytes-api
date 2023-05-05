@@ -1,7 +1,43 @@
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const User = require("../models/User");
+const checkAuth = require("../middleware/checkAuth");
 
 module.exports = (app) => {
+  app.get("/", (req, res) => res.json("hello world"));
+
+  // SHOW all
+  app.get("/users", checkAuth, async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).send("Unauthorized. Please login.");
+      }
+      const users = await User.find();
+      res.json({ users });
+    } catch (err) {
+      console.log(`Get users error: ${err}`);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // SHOW one
+  app.get("/users/:id", checkAuth, async (req, res) => {
+    try {
+      if (req.user._id != req.params.id) {
+        return res.status(401).send("Unauthorized. Please login.");
+      }
+      const { id } = req.params;
+      const user = await User.findById(id);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      res.json({ user });
+    } catch (err) {
+      console.log(`Get user error: ${err}`);
+      res.status(404).json({ error: err.message });
+    }
+  });
+
   // SIGN UP FORM
   app.get("/sign-up", (req, res) => res.render("sign-up"));
 
@@ -66,7 +102,7 @@ module.exports = (app) => {
         );
         // Set a cookie and redirect to root
         res.cookie("nToken", token, { maxAge: 900000, httpOnly: true });
-        return res.redirect("/");
+        return res.redirect(`/users/${user.id}`);
       });
     } catch (err) {
       console.log(err);
