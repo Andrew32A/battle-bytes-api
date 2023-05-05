@@ -86,14 +86,17 @@ module.exports = (app) => {
       }
 
       // check if user is alive
-      // if (!user.isAlive) {
-      //   return res
-      //     .status(409)
-      //     .send({
-      //       message:
-      //         "You have been killed while you were away, better luck next time!",
-      //     });
-      // }
+      const userStatus = await User.findOne({ username })
+      if (userStatus.isAlive === false) {
+        return res
+          .status(409)
+          .send({
+            message:
+              "You have been killed while you were away, better luck next time!",
+          });
+      }
+
+      console.log("USER ALIVE?", userStatus.isAlive)
 
       // Check the password
       user.comparePassword(password, (err, isMatch) => {
@@ -151,7 +154,8 @@ module.exports = (app) => {
       }
       const guessedDefense = req.body.defense;
       if (guessedDefense === enemy.defense) {
-        await User.deleteOne({ _id: enemy.id });
+        // await User.deleteOne({ _id: enemy.id }); // permanent deletion
+        await User.updateOne({_id: enemy.id}, {isAlive: false}); // sets isAlive to false
         return res.send("Enemy eliminated!");
       } else {
         console.log("ENEMY DEFENSE", enemy.defense)
