@@ -119,4 +119,29 @@ module.exports = (app) => {
       console.log(err);
     }
   });
+
+  // probe
+  app.get("/probe/:id", async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+      const defense = user.defense;
+      const halfDefense = defense.substr(0, Math.ceil(defense.length / 2));
+      return res.send(halfDefense);
+    } catch (e) {
+      console.error(e);
+      res.status(500).send();
+    }
+  });
+
+  // help, controls, 
+  app.get("/help", async (req, res) => { 
+    res.json("help")
+  })
+  
+
+
+  // attack
 };
