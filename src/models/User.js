@@ -5,7 +5,8 @@ const userSchema = new Schema(
   {
     username: { type: String, required: true },
     password: { type: String, select: false },
-    // favorites: [{ type: Schema.Types.ObjectId, ref: "Favorites" }],
+    defense: { type: String, required: true},
+    isAlive: { type: Boolean, default: true }
   },
   { timestamps: true }
 );

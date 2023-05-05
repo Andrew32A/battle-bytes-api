@@ -84,6 +84,17 @@ module.exports = (app) => {
         // User not found
         return res.status(401).send({ message: "Wrong Username or Password" });
       }
+
+      // check if user is alive
+      if (!user.isAlive) {
+        return res
+          .status(409)
+          .send({
+            message:
+              "You have been killed while you were away, better luck next time!",
+          });
+      }
+
       // Check the password
       user.comparePassword(password, (err, isMatch) => {
         if (!isMatch) {
