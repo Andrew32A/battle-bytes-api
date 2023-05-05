@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const MONGODB_URI = process.env.MONGODB_URI;
 
 // Connect to MongoDB
-const mongoUri = 'mongodb://localhost/dadjokes';
+const mongoUri = 'mongodb://localhost/battlebytes';
 
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,

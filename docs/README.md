@@ -1,3 +1,3 @@
-# Dad Jokes Api
+# Battle Bytes Api
 
 > ...
