@@ -86,14 +86,14 @@ module.exports = (app) => {
       }
 
       // check if user is alive
-      if (!user.isAlive) {
-        return res
-          .status(409)
-          .send({
-            message:
-              "You have been killed while you were away, better luck next time!",
-          });
-      }
+      // if (!user.isAlive) {
+      //   return res
+      //     .status(409)
+      //     .send({
+      //       message:
+      //         "You have been killed while you were away, better luck next time!",
+      //     });
+      // }
 
       // Check the password
       user.comparePassword(password, (err, isMatch) => {
@@ -140,8 +140,27 @@ module.exports = (app) => {
   app.get("/help", async (req, res) => { 
     res.json("help")
   })
-  
-
 
   // attack
+  app.post("/attack/:id", checkAuth, async (req, res) => {
+    try {
+      const user = await User.findById(req.user._id); // assuming req.user contains the authenticated user's information
+      const enemy = await User.findById(req.params.id);
+      if (!enemy) {
+        return res.status(404).send("Enemy not found");
+      }
+      const guessedDefense = req.body.defense;
+      if (guessedDefense === enemy.defense) {
+        await User.deleteOne({ _id: enemy.id });
+        return res.send("Enemy eliminated!");
+      } else {
+        console.log("ENEMY DEFENSE", enemy.defense)
+        console.log("GUESSED DEFENSE", guessedDefense)
+        return res.send("Incorrect guess, try again.");
+      }
+    } catch (e) {
+      console.error(e);
+      res.status(500).send();
+    }
+  });  
 };
