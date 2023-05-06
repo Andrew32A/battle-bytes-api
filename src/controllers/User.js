@@ -199,5 +199,4 @@ module.exports = (app) => {
       res.status(500).send();
     }
   });
-  
 };

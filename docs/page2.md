@@ -46,20 +46,4 @@ Endpoints for user authentication.
 
 | Method | Endpoint | Request Body | Responses |
 |--------|----------|--------------|-----------|
-| POST | `/login` | `username` (required): The username of the user to authenticate.
-
-# GET /probe/:id
-
-| Parameters |        |
-| :--------- | :----- |
-| id (required) | The ID of the opponent to probe. |
-
-| Responses |                                   |
-| :-------- | :-------------------------------- |
-| 200 OK    | Returns the first half of the opponent's defense. |
-
-# GET /help
-
-| Responses |                         |
-| :-------- | :---------------------- |
-| 200 OK    | Returns a JSON message help. |
+| POST | `/login` | `username` (required): The username of the user to authenticate.<
