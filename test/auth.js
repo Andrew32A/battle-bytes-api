@@ -2,34 +2,37 @@ const chai = require("chai");
 const chaiHttp = require("chai-http");
 const { describe, it, after } = require("mocha");
 const app = require("../src/server");
-
 const should = chai.should();
-
 chai.use(chaiHttp);
-
-// Agent that will keep track of our cookies
 const agent = chai.request.agent(app);
-
 const User = require("../src/models/User");
 
 describe("User", function () {
-  // No login if not registered
-  it("should not be able to login if they have not registered", function (done) {
+  // login without valid account
+  it("user should not be able to login if they haven't registered yet", function (done) {
     agent
-      .post("/login", { username: "testUsername", password: "testPassword", defense: "testDefense" })
+      .post("/login", {
+        username: "testUsername",
+        password: "testPassword",
+        defense: "testDefense",
+      })
       .end(function (err, res) {
         res.should.have.status(401);
         done();
       });
   });
 
-  // Signup
-  it("should be able to signup", function (done) {
+  // signup
+  it("user should be able to sign up", function (done) {
     User.findOneAndDelete({ username: "testone" })
       .then(function () {
         agent
           .post("/sign-up")
-          .send({ username: "testUsername", password: "testPassword", defense: "testDefense" })
+          .send({
+            username: "testUsername2",
+            password: "testPassword",
+            defense: "testDefense",
+          })
           .end(function (err, res) {
             res.should.have.status(200);
             agent.should.have.cookie("nToken");
@@ -41,11 +44,11 @@ describe("User", function () {
       });
   });
 
-  // Login
-  it("should be able to login", function (done) {
+  // login with valid account
+  it("user should be able to login", function (done) {
     agent
       .post("/login")
-      .send({ username: "testUsername", password: "testPassword"})
+      .send({ username: "testUsername", password: "testPassword" })
       .end(function (err, res) {
         res.should.have.status(200);
         agent.should.have.cookie("nToken");
@@ -53,8 +56,8 @@ describe("User", function () {
       });
   });
 
-  // Logout
-  it("should be able to logout", function (done) {
+  // logout
+  it("user should be able to logout", function (done) {
     agent.get("/logout").end(function (err, res) {
       res.should.have.status(200);
       agent.should.not.have.cookie("nToken");
