@@ -8,6 +8,30 @@ const agent = chai.request.agent(app);
 const User = require("../src/models/User");
 
 describe("User", function () {
+  // create test user
+  before(async function () {
+    const user = new User({
+      username: 'testUsername',
+      password: 'testPassword'
+    });
+    try {
+      const savedUser = await user.save();
+      this.userId = savedUser._id;
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
+  // delete test user
+  after(async function () {
+    try {
+      await User.deleteOne({ username: "testUsername" });
+      agent.close();
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
   // login without valid account
   it("user should not be able to login if they haven't registered yet", function (done) {
     agent
@@ -29,7 +53,7 @@ describe("User", function () {
         agent
           .post("/sign-up")
           .send({
-            username: "testUsername2",
+            username: "testUsername",
             password: "testPassword",
             defense: "testDefense",
           })
