@@ -169,6 +169,21 @@ module.exports = (app) => {
   });
   
   // update
+  app.post("/defend", checkAuth, async (req, res) => {
+    try {
+      const user = await User.findById(req.user._id); // assuming req.user contains the authenticated user's information
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+      const newDefense = req.body.defense;
+      user.defense = newDefense;
+      await user.save();
+      return res.send("Defense updated successfully!");
+    } catch (e) {
+      console.error(e);
+      res.status(500).send();
+    }
+  });
 
   // delete
 };
