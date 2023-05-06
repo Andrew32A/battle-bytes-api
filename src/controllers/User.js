@@ -5,7 +5,7 @@ const checkAuth = require("../middleware/checkAuth");
 
 module.exports = (app) => {
   // root
-  app.get("/", (req, res) => res.json("hello world"));
+  app.get("/", (req, res) => res.json("Welcome to Battle Bytes! Go to /help or docs for more information."));
 
   // show all
   app.get("/users", checkAuth, async (req, res) => {
@@ -168,7 +168,7 @@ module.exports = (app) => {
     }
   });
   
-  // update
+  // update logged in user's defense
   app.post("/defend", checkAuth, async (req, res) => {
     try {
       const user = await User.findById(req.user._id); // assuming req.user contains the authenticated user's information
@@ -185,5 +185,19 @@ module.exports = (app) => {
     }
   });
 
-  // delete
+  // delete user's account
+  app.delete("/delete", checkAuth, async (req, res) => {
+    try {
+      const user = await User.findById(req.user._id); // assuming req.user contains the authenticated user's information
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+      await User.deleteOne({ _id: user._id });
+      return res.send("Account deleted successfully!");
+    } catch (e) {
+      console.error(e);
+      res.status(500).send();
+    }
+  });
+  
 };
