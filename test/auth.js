@@ -27,7 +27,6 @@ describe("User", function () {
   after(async function () {
     try {
       await User.deleteOne({ username: "testUsername" });
-      await User.findOneAndDelete({ username: "testUsername2" });
       agent.close();
     } catch (err) {
       console.error(err);
@@ -50,12 +49,12 @@ describe("User", function () {
 
   // signup
   it("user should be able to sign up", function (done) {
-    User.findOneAndDelete({ username: "testone" })
+    User.findOneAndDelete({ username: "testUsername" })
       .then(function () {
         agent
           .post("/sign-up")
           .send({
-            username: "testUsername2",
+            username: "testUsername",
             password: "testPassword",
             defense: "testDefense",
           })
