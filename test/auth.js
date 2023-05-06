@@ -11,8 +11,9 @@ describe("User", function () {
   // create test user
   before(async function () {
     const user = new User({
-      username: 'testUsername',
-      password: 'testPassword'
+      username: "testUsername",
+      password: "testPassword",
+      defense: "testDefense",
     });
     try {
       const savedUser = await user.save();
@@ -26,6 +27,7 @@ describe("User", function () {
   after(async function () {
     try {
       await User.deleteOne({ username: "testUsername" });
+      await User.findOneAndDelete({ username: "testUsername2" });
       agent.close();
     } catch (err) {
       console.error(err);
@@ -53,7 +55,7 @@ describe("User", function () {
         agent
           .post("/sign-up")
           .send({
-            username: "testUsername",
+            username: "testUsername2",
             password: "testPassword",
             defense: "testDefense",
           })
@@ -87,9 +89,5 @@ describe("User", function () {
       agent.should.not.have.cookie("nToken");
       done();
     });
-  });
-
-  after(function () {
-    return User.findOneAndDelete({ username: "testone" });
   });
 });
