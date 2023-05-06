@@ -4,9 +4,10 @@ const User = require("../models/User");
 const checkAuth = require("../middleware/checkAuth");
 
 module.exports = (app) => {
+  // root
   app.get("/", (req, res) => res.json("hello world"));
 
-  // SHOW all
+  // show all
   app.get("/users", checkAuth, async (req, res) => {
     try {
       if (!req.user) {
@@ -20,7 +21,7 @@ module.exports = (app) => {
     }
   });
 
-  // SHOW one
+  // show one
   app.get("/users/:id", checkAuth, async (req, res) => {
     try {
       if (req.user._id != req.params.id) {
@@ -38,26 +39,25 @@ module.exports = (app) => {
     }
   });
 
-  // SIGN UP FORM
+  // sign up form (don't have a view yet)
   app.get("/sign-up", (req, res) => res.render("sign-up"));
 
-  // SIGN UP POST
+  // create user
   app.post("/sign-up", async (req, res) => {
     try {
-      // Create User
       const user = new User(req.body);
       await user.save();
 
-      // Create JWT token
+      // JWT token
       const token = jwt.sign({ _id: user._id }, process.env.SECRET, {
         expiresIn: "60 days",
       });
-      // Set cookie
+      // set cookie
       res.cookie("nToken", token, { maxAge: 900000, httpOnly: true });
       res.redirect("/");
     } catch (err) {
       if (err.name === "MongoError" && err.code === 11000) {
-        // Duplicate key error - username already taken
+        // duplicate key error - username already taken
         return res.status(409).send("Username already taken");
       }
       console.log(err);
@@ -65,23 +65,23 @@ module.exports = (app) => {
     }
   });
 
-  // LOGOUT
+  // logout
   app.get("/logout", (req, res) => {
     res.clearCookie("nToken");
     res.redirect("/");
   });
 
-  // LOGIN FORM
+  // login form (don't have a view yet)
   app.get("/login", (req, res) => res.render("login"));
 
-  //LOGIN
+  // login
   app.post("/login", async (req, res) => {
     const { username, password } = req.body;
     try {
-      // Find this user name
+      // find this username
       const user = await User.findOne({ username }, "username password");
       if (!user) {
-        // User not found
+        // user not found
         return res.status(401).send({ message: "Wrong Username or Password" });
       }
 
@@ -96,17 +96,17 @@ module.exports = (app) => {
           });
       }
 
-      console.log("USER ALIVE?", userStatus.isAlive)
+      console.log("IS USER ALIVE?", userStatus.isAlive)
 
-      // Check the password
+      // check the password
       user.comparePassword(password, (err, isMatch) => {
         if (!isMatch) {
-          // Password does not match
+          // password does not match
           return res
             .status(401)
             .send({ message: "Wrong Username or password" });
         }
-        // Create a token
+        // create a token
         const token = jwt.sign(
           { _id: user._id, username: user.username },
           process.env.SECRET,
@@ -114,7 +114,7 @@ module.exports = (app) => {
             expiresIn: "60 days",
           }
         );
-        // Set a cookie and redirect to root
+        // set a cookie and redirect to root
         res.cookie("nToken", token, { maxAge: 900000, httpOnly: true });
         return res.redirect(`/users/${user.id}`);
       });
@@ -139,7 +139,7 @@ module.exports = (app) => {
     }
   });
 
-  // help, controls, 
+  // help, controls, rules, etc
   app.get("/help", async (req, res) => { 
     res.json("help")
   })
@@ -166,5 +166,9 @@ module.exports = (app) => {
       console.error(e);
       res.status(500).send();
     }
-  });  
+  });
+  
+  // update
+
+  // delete
 };
