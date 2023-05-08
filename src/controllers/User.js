@@ -141,13 +141,13 @@ module.exports = (app) => {
 
   // help, controls, rules, etc
   app.get("/help", async (req, res) => { 
-    res.json("help")
+    res.render("README");
   })
 
   // attack
   app.post("/attack/:id", checkAuth, async (req, res) => {
     try {
-      const user = await User.findById(req.user._id); // assuming req.user contains the authenticated user's information
+      const user = await User.findById(req.user._id);
       const enemy = await User.findById(req.params.id);
       if (!enemy) {
         return res.status(404).send("Enemy not found");
@@ -171,7 +171,7 @@ module.exports = (app) => {
   // update logged in user's defense
   app.post("/defend", checkAuth, async (req, res) => {
     try {
-      const user = await User.findById(req.user._id); // assuming req.user contains the authenticated user's information
+      const user = await User.findById(req.user._id);
       if (!user) {
         return res.status(404).send("User not found");
       }
@@ -188,7 +188,7 @@ module.exports = (app) => {
   // delete user's account
   app.delete("/delete", checkAuth, async (req, res) => {
     try {
-      const user = await User.findById(req.user._id); // assuming req.user contains the authenticated user's information
+      const user = await User.findById(req.user._id);
       if (!user) {
         return res.status(404).send("User not found");
       }
