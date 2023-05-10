@@ -131,8 +131,18 @@ module.exports = (app) => {
         return res.status(404).send("User not found");
       }
       const defense = user.defense;
-      const halfDefense = defense.substr(0, Math.ceil(defense.length / 2));
-      return res.send(halfDefense);
+      // const halfDefense = defense.substr(0, Math.ceil(defense.length / 2));
+      const firstLetter = defense.charAt(0);
+      const lastLetter = defense.charAt(defense.length - 1);
+      const defenseLength = defense.length;
+      const result = {
+        "First letter of defense": firstLetter,
+        "Last letter of defense": lastLetter,
+        "Number of characters in defense": defenseLength,
+      };
+      // "Half of defense": halfDefense,
+      
+      return res.json(result);
     } catch (e) {
       console.error(e);
       res.status(500).send();
