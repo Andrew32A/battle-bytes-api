@@ -8,6 +8,12 @@
 |--------|----------|-----------|
 | GET | `/` | 200 OK: Returns a JSON message Welcome to Battle Bytes! Go to /help or docs for more information. |
 
+> Endpoint to show directions.
+
+| Method | Endpoint | Responses |
+|--------|----------|------------|
+| GET | `/help` | 200 OK: Returns a JSON message help. |
+
 ## Authentication
 > Endpoint to create a new user.
 
@@ -52,9 +58,3 @@
 | Method | Endpoint | Parameters | Responses |
 |--------|----------|------------|----------|
 | GET | `/probe/:id` | The ID of the opponent to probe. | 200 OK: Returns hints for the target's defense - first and last letter of defense and number of characters in defense.<br>404 Not Found: If the requested user is not found.
-
-> Endpoint to show directions
-
-| Method | Endpoint | Responses |
-|--------|----------|------------|
-| GET | `/help` | 200 OK: Returns a JSON message help. |
