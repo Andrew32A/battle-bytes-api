@@ -130,15 +130,30 @@ module.exports = (app) => {
       if (!user) {
         return res.status(404).send("User not found");
       }
-      const defense = user.defense;
       // const halfDefense = defense.substr(0, Math.ceil(defense.length / 2));
-      const firstLetter = defense.charAt(0);
-      const lastLetter = defense.charAt(defense.length - 1);
+      const defense = user.defense;
       const defenseLength = defense.length;
+      const lowercaseRegex = /[a-z]/g;
+      const uppercaseRegex = /[A-Z]/g;
+      const numberRegex = /\d/g;
+      const symbolRegex = /[$-/:-?{-~!"^_`\[\]]/g;
+      const spaceRegex = /\s/g;
+      const lowercaseCount = (defense.match(lowercaseRegex) || []).length;
+      const uppercaseCount = (defense.match(uppercaseRegex) || []).length;
+      const numberCount = (defense.match(numberRegex) || []).length;
+      const symbolCount = (defense.match(symbolRegex) || []).length;
+      const spaceCount = (defense.match(spaceRegex) || []).length;
+      const firstLetter = defense.charAt(0);
+      const lastLetter = defense.charAt(defenseLength - 1);
       const result = {
         "First letter of defense": firstLetter,
         "Last letter of defense": lastLetter,
         "Number of characters in defense": defenseLength,
+        "Lowercase count": lowercaseCount,
+        "Uppercase count": uppercaseCount,
+        "Number count": numberCount,
+        "Symbol count": symbolCount,
+        "Space count": spaceCount,
       };
       // "Half of defense": halfDefense,
       
