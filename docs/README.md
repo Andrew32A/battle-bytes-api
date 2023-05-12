@@ -1,6 +1,6 @@
 # Battle Bytes Api
 
-## Root
+## Root/Help
 
 > Endpoint to test if the server is running.
 
