@@ -1,5 +1,11 @@
 # Battle Bytes Api
 
+Looking for a custom API that lets you build and defend your territory against other users? Look no further than Battle Bytes! Built using Express and MongoDB, this API hosts the main database on MongoDB Atlas and tests were conducted using Mocha and Chai to ensure smooth and seamless gameplay.
+
+With Battle Bytes, you can create your own defenses and challenge other users to attack them. If your defense is strong enough to withstand the attack, you'll earn bragging rights and be recognized as a true champion. But be warned - if your defense is breached, you'll be immediately deleted from the database.
+
+Join us now and test your skills in the ultimate battle for supremacy. Let's see if you have what it takes to reign supreme in Battle Bytes!
+
 ## Root/Help
 
 > Endpoint to test if the server is running.
