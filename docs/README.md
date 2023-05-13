@@ -6,6 +6,8 @@ With Battle Bytes, you can create your own defenses and challenge other users to
 
 Join us now and test your skills in the ultimate battle for supremacy. Let's see if you have what it takes to reign supreme in Battle Bytes!
 
+<h2 align="center"><a href="https://andrew32a.github.io/battle-bytes-api/#/">Click here to see the docs!</a></h3>
+
 ## Root/Help
 
 > Endpoint to test if the server is running.
